@@ -18,8 +18,21 @@ return (recettes)
 
  async function init() {
     const recettes = await getRecipes();
-    
     displayData(recettes)
+    searchInput()
+ }
+
+ function searchInput() {
+   const searchBar = document.getElementById('recipe-search')
+   searchBar.addEventListener('input', filterSearch)
+ }
+
+ function filterSearch() {
+    if (this.value.length < 2 ) {
+       return;
+      } if (this.value.length > 2 ) {
+         console.log(this.value)
+   }
  }
 
  init();
