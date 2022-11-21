@@ -2,12 +2,25 @@ function recettesFactory(data) {
     const { name, ingredients, time, description, id } = data;
 
     function createRecipe() {
-        console.log(time)
         const article = document.createElement('article');
         article.classList.add('recipe');
 
-        const a = document.createElement('a');
-        a.textContent = name;
+        const img = document.createElement('img');
+        img.classList.add('recipe-img');
+
+        const divTitleTime = document.createElement('div')
+        divTitleTime.classList.add('divTitleTime')
+
+        const title = document.createElement('a');
+        title.textContent = name;
+        title.classList.add('recipe-title')
+
+        const timeText = document.createElement('a');
+        timeText.textContent = time;
+        timeText.classList.add('recipe-time')
+
+        divTitleTime.appendChild(title);
+        divTitleTime.appendChild(timeText)
 
         const li = document.createElement('li');
         ingredients.forEach((x) => {
@@ -16,17 +29,17 @@ function recettesFactory(data) {
             li.appendChild(ul)
         })
 
-        const timeText = document.createElement('a');
-        timeText.textContent = time;
-
         const descriptionText = document.createElement('p');
         descriptionText.textContent = description
 
-        article.appendChild(a);
-        article.appendChild(li);
-        article.appendChild(timeText);
-        article.appendChild(descriptionText);
+        const divIngredientsDescription = document.createElement('div');
+        divIngredientsDescription.classList.add('divIngredientsDescription')
+        divIngredientsDescription.appendChild(li)
+        divIngredientsDescription.appendChild(descriptionText)
 
+        article.appendChild(img)
+        article.appendChild(divTitleTime);
+        article.appendChild(divIngredientsDescription)
 
         return (article)
     }
