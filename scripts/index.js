@@ -22,13 +22,37 @@ function displayData(data) {
     const userDOM = recettesModel.createRecipe();
     recettesSection.appendChild(userDOM);
   });
+  fillSelectIngredients();
+  fillSelectAppareils();
+  fillSelectUstensiles();
+}
+
+function fillSelectIngredients() {
+  const selectIngredients = document.getElementById('Ingredients');
+  for(x in ingredientList) {
+    selectIngredients.options[selectIngredients.options.length] = new Option(ingredientList[x], x)
+  }
+}
+
+function fillSelectAppareils() {
+  const selectAppareils = document.getElementById('Appareils');
+  for(x in appareilList) {
+    selectAppareils.options[selectAppareils.options.length] = new Option(appareilList[x], x)
+  }
+}
+
+function fillSelectUstensiles() {
+  const selectUstensiles = document.getElementById('Ustensiles');
+  for(x in ustensilsList) {
+    selectUstensiles.options[selectUstensiles.options.length] = new Option(ustensilsList[x], x)
+  }
 }
 
 function addIngredients(data) {
-
   data.forEach((ingredient) => {
-    if (!ingredientList.includes(ingredient.ingredient)) {
-      ingredientList.push(ingredient.ingredient);
+    let lowerCaseIngredient = ingredient.ingredient.toLowerCase()
+    if (!ingredientList.includes(lowerCaseIngredient)) {
+      ingredientList.push(lowerCaseIngredient);
     } else {
       return;
     }
@@ -36,20 +60,20 @@ function addIngredients(data) {
 }
 
 function addAppareils(data) {
-
-  if(!appareilList.includes(data)) {
-    appareilList.push(data)
-    console.log("🚀 ~ file: index.js ~ line 40 ~ addAppareils ~ appareilList", appareilList)
+  let lowerCaseAppareil = data.toLowerCase();
+  
+  if(!appareilList.includes(lowerCaseAppareil)) {
+    appareilList.push(lowerCaseAppareil)
   } else {
     return;
   }
 }
 
 function addUstensils(data) {
-
   data.forEach((ustensil) => {
-    if(!ustensilsList.includes(ustensil)) {
-      ustensilsList.push(ustensil);
+    let lowerCaseUstensil = ustensil.toLowerCase();
+    if(!ustensilsList.includes(lowerCaseUstensil)) {
+      ustensilsList.push(lowerCaseUstensil);
     } else {
       return;
     }
