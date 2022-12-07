@@ -61,7 +61,6 @@ function addIngredients(data) {
 
 function addAppareils(data) {
   let lowerCaseAppareil = data.toLowerCase();
-  
   if(!appareilList.includes(lowerCaseAppareil)) {
     appareilList.push(lowerCaseAppareil)
   } else {
@@ -80,12 +79,35 @@ function addUstensils(data) {
   })
 }
 
-
-
 async function init() {
   const recettes = await getRecipes();
   displayData(recettes);
   searchInput();
+  initEventListeners();
+}
+
+function initEventListeners() {
+  const selectIngredients = document.getElementById('Ingredients');
+  selectIngredients.addEventListener('change', getIngredientTag)
+
+  const selectAppareils = document.getElementById('Appareils');
+  selectAppareils.addEventListener('change', getAppareilsTag)
+
+  const selectUstensiles = document.getElementById('Ustensiles');
+  selectUstensiles.addEventListener('change', getUstensilsTag)
+
+}
+
+
+
+function getAppareilsTag() {
+  const selectAppareils = document.getElementById('Appareils');
+  console.log(selectAppareils.options[selectAppareils.selectedIndex].text)
+}
+
+function getUstensilsTag() {
+  const selectUstensils = document.getElementById('Ustensiles');
+  console.log(selectUstensils.options[selectUstensils.selectedIndex].text)
 }
 
 function searchInput() {
@@ -95,7 +117,6 @@ function searchInput() {
 
 async function filterSearch() {
   const recettes = await getRecipes();
-
   if (this.value == "") {
     console.log(" ca passe ici");
     displayData(recettes);
@@ -105,13 +126,21 @@ async function filterSearch() {
   }
   if (this.value.length > 2) {
     const valueLowerCase = this.value.toLowerCase();
-    filteredRecipes = recettes.filter(
-      (x) =>
-        x.name.toLowerCase().includes(valueLowerCase) ||
-        x.description.toLowerCase().includes(valueLowerCase)
+    filteredRecipes = recettes.filter((x) => 
+    x.name.toLowerCase().includes(valueLowerCase) || x.description.toLowerCase().includes(valueLowerCase)
     );
     displayData(filteredRecipes);
   }
 }
+
+async function getIngredientTag() {
+  const recettes = await getRecipes();
+  const selectIngredients = document.getElementById('Ingredients');
+  let selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
+  console.log(selectedIngredient)
+  console.log(recettes)
+}
+
+
 
 init();
