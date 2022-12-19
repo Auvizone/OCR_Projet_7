@@ -3,6 +3,7 @@
 let ingredientList = [];
 let appareilList = []
 let ustensilsList = [];
+let shownRecipes;
 
 async function getRecipes() {
   const response = await fetch("../recettes.json");
@@ -10,11 +11,20 @@ async function getRecipes() {
   return recettes;
 }
 
-function displayData(data) {
+function emptyLists() {
   ingredientList = [];
+  appareilList = [''];
+  ustensilsList = [''];
+}
+
+async function displayData(data) {
+  emptyLists();
+  console.log('addIngredients before', ingredientList)
+  shownRecipes = data;
+  console.log("🚀 ~ file: index.js:16 ~ displayData ~ shownRecipes", shownRecipes)
   const recettesSection = document.getElementById("recettes-section");
   recettesSection.innerHTML = "";
-  data.forEach((recettes) => {
+  shownRecipes.forEach((recettes) => {
     addIngredients(recettes.ingredients);
     addAppareils(recettes.appliance)
     addUstensils(recettes.ustensils)
@@ -22,6 +32,7 @@ function displayData(data) {
     const userDOM = recettesModel.createRecipe();
     recettesSection.appendChild(userDOM);
   });
+  console.log('addIngredients after', ingredientList)
   fillSelectIngredients();
   fillSelectAppareils();
   fillSelectUstensiles();
@@ -29,6 +40,7 @@ function displayData(data) {
 
 function fillSelectIngredients() {
   const selectIngredients = document.getElementById('Ingredients');
+  selectIngredients.options.length = 0;
   for(x in ingredientList) {
     selectIngredients.options[selectIngredients.options.length] = new Option(ingredientList[x], x)
   }
@@ -36,6 +48,7 @@ function fillSelectIngredients() {
 
 function fillSelectAppareils() {
   const selectAppareils = document.getElementById('Appareils');
+  selectAppareils.options.length = 0;
   for(x in appareilList) {
     selectAppareils.options[selectAppareils.options.length] = new Option(appareilList[x], x)
   }
@@ -43,6 +56,7 @@ function fillSelectAppareils() {
 
 function fillSelectUstensiles() {
   const selectUstensiles = document.getElementById('Ustensiles');
+  selectUstensiles.options.length = 0;
   for(x in ustensilsList) {
     selectUstensiles.options[selectUstensiles.options.length] = new Option(ustensilsList[x], x)
   }
@@ -80,6 +94,7 @@ function addUstensils(data) {
 }
 
 async function init() {
+  console.log('init', ingredientList)
   const recettes = await getRecipes();
   displayData(recettes);
   searchInput();
@@ -98,7 +113,13 @@ function initEventListeners() {
 
 }
 
-
+async function getIngredientTag() {
+  const recettes = await getRecipes();
+  const selectIngredients = document.getElementById('Ingredients');
+  let selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
+  console.log(selectedIngredient)
+  console.log(recettes)
+}
 
 function getAppareilsTag() {
   const selectAppareils = document.getElementById('Appareils');
@@ -126,21 +147,11 @@ async function filterSearch() {
   }
   if (this.value.length > 2) {
     const valueLowerCase = this.value.toLowerCase();
-    filteredRecipes = recettes.filter((x) => 
+    let filteredRecipes = recettes.filter((x) => 
     x.name.toLowerCase().includes(valueLowerCase) || x.description.toLowerCase().includes(valueLowerCase)
     );
     displayData(filteredRecipes);
   }
 }
-
-async function getIngredientTag() {
-  const recettes = await getRecipes();
-  const selectIngredients = document.getElementById('Ingredients');
-  let selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
-  console.log(selectedIngredient)
-  console.log(recettes)
-}
-
-
 
 init();
