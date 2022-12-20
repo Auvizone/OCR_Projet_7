@@ -77,3 +77,45 @@ header {
     border: none;
     border-radius: 5px;
 }
+
+#tags {
+    display: flex;
+    flex-direction: row;
+    width:90%;
+    margin: 15px 0 15px 5%;
+    max-width: 90%;
+}
+
+.tag {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 15px;
+    border-radius: 3px;
+    margin-right: 10px;
+    color: white;
+}
+
+.tag > p {
+
+    padding: 0px;
+    margin: 0px;
+    font-size: 14px;
+}
+
+.blueTag {
+    background-color: #3282F7;
+}
+
+.redTag {
+    background-color: #ED6454;
+}
+
+.greenTag {
+    background-color: #68D9A4;
+}
+
+.closeTag > i {
+    font-size:16px;
+    margin-left: 5px;
+    cursor: pointer;
+}

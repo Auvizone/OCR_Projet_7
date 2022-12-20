@@ -3,7 +3,7 @@
 let ingredientList = [];
 let appareilList = []
 let ustensilsList = [];
-let shownRecipes;
+let shownRecipes = [];
 
 async function getRecipes() {
   const response = await fetch("../recettes.json");
@@ -19,9 +19,7 @@ function emptyLists() {
 
 async function displayData(data) {
   emptyLists();
-  console.log('addIngredients before', ingredientList)
   shownRecipes = data;
-  console.log("🚀 ~ file: index.js:16 ~ displayData ~ shownRecipes", shownRecipes)
   const recettesSection = document.getElementById("recettes-section");
   recettesSection.innerHTML = "";
   shownRecipes.forEach((recettes) => {
@@ -32,7 +30,6 @@ async function displayData(data) {
     const userDOM = recettesModel.createRecipe();
     recettesSection.appendChild(userDOM);
   });
-  console.log('addIngredients after', ingredientList)
   fillSelectIngredients();
   fillSelectAppareils();
   fillSelectUstensiles();
@@ -114,21 +111,43 @@ function initEventListeners() {
 }
 
 async function getIngredientTag() {
-  const recettes = await getRecipes();
   const selectIngredients = document.getElementById('Ingredients');
   let selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
-  console.log(selectedIngredient)
-  console.log(recettes)
+  console.log(shownRecipes)
+  let filtered = shownRecipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient.toLowerCase()))
+  shownRecipes = filtered;
+  displayData(shownRecipes)
+  addTag(selectedIngredient, 'blueTag')
 }
 
 function getAppareilsTag() {
   const selectAppareils = document.getElementById('Appareils');
-  console.log(selectAppareils.options[selectAppareils.selectedIndex].text)
+  let selectedAppliance = selectAppareils.options[selectAppareils.selectedIndex].text;
+  let filtered = shownRecipes.filter(recipe => recipe.appliance.toLowerCase() === selectedAppliance.toLowerCase())
+  shownRecipes = filtered;
+  displayData(shownRecipes)
+  addTag(selectedAppliance, 'greenTag')
 }
 
 function getUstensilsTag() {
   const selectUstensils = document.getElementById('Ustensiles');
-  console.log(selectUstensils.options[selectUstensils.selectedIndex].text)
+  let selectedUstensil = selectUstensils.options[selectUstensils.selectedIndex].text;
+  let filtered = shownRecipes.filter(recipe => recipe.ustensils.some(ustensil => ustensil.toLowerCase() === selectedUstensil.toLowerCase()))
+  shownRecipes = filtered;
+  displayData(shownRecipes)
+  addTag(selectedUstensil, 'redTag')
+}
+
+async function addTag(name, color) {
+  const tagSection = document.getElementById('tags');
+  let tagData = [];
+  tagData.name = name;
+  tagData.color = color;
+  console.log("🚀 ~ file: index.js:144 ~ addTag ~ tagData", tagData)
+  const tagModel = tagFactory(tagData);
+  console.log('tagModel')
+  const userDOM = tagModel.createTag();
+  tagSection.appendChild(userDOM)
 }
 
 function searchInput() {
