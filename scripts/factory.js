@@ -16,7 +16,7 @@ function recettesFactory(data) {
         title.classList.add('recipe-title')
 
         const timeText = document.createElement('a');
-        timeText.textContent = time;
+        timeText.innerHTML = `<i class="fa-regular fa-clock"></i> ${time} min`;
         timeText.classList.add('recipe-time')
 
         divTitleTime.appendChild(title);
@@ -24,13 +24,21 @@ function recettesFactory(data) {
 
         const li = document.createElement('li');
         ingredients.forEach((x) => {
+            if (!x.unit) {
+                x.unit = '';
+            }
+            if (!x.quantity) {
+                x.quantity = '';
+            }
             const ul = document.createElement('ul');
-            ul.textContent = x.ingredient + ': ' +  x.quantity;
+            ul.textContent = x.ingredient + ': ' +  x.quantity + ' ' + x.unit;
             li.appendChild(ul)
         })
+        li.classList.add('ingredientList')
 
         const descriptionText = document.createElement('p');
         descriptionText.textContent = description
+        descriptionText.classList.add('recipeDescription')
 
         const divIngredientsDescription = document.createElement('div');
         divIngredientsDescription.classList.add('divIngredientsDescription')

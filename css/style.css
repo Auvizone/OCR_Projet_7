@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
 body {
     margin: 0;
     padding: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 header {
@@ -9,9 +12,9 @@ header {
     justify-content: center;
 }
 
-.hide {
+/* .hide {
     display: none;
-}
+} */
 
 .logo {
     margin: 10px 0;
@@ -23,20 +26,31 @@ header {
     margin: 0 auto;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .input {
     width: 100%;
     height: 40px;
-    background-color: gray;
+    background-color: #E7E7E7;
     border: none;
     border-radius: 5px;
+    padding: 5px 5px 5px 15px;
 }
 
-.select-box {
+.searchIcon {
+    position:absolute;
+    right: 10px;
+    top:50%;
+    transform: translateY(-50%)
+}
+
+/* .select-box {
     width: 90%;
     margin: 0 auto;
-}
+    display: flex;
+    flex-direction: row;
+} */
 
 #recettes-section {
     display: flex;
@@ -50,7 +64,10 @@ header {
     width: 28%;
     height: auto;
     border-radius: 10px;
-    background-color: #bcbcbc;
+    background-color: #E7E7E7;
+    margin-bottom: 40px;
+    font-size: 12px;
+    max-height: 450px;
 }
 
 .recipe-img {
@@ -58,6 +75,46 @@ header {
     width:100%;
     background-color: #c7bebe;
     border-radius: 10px 10px 0 0;
+}
+
+.divTitleTime {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 90%;
+    margin: 5px auto;
+    font-size: 16px;
+}
+
+.divIngredientsDescription {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width:90%;
+    margin: 0 auto;
+}
+
+.ingredientList {
+    width: 40%;
+    list-style-type: none;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+.recipeDescription {
+    width: 50%;
+    height: 170px;
+    display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.recipe-time {
+    font-weight: bold;
 }
 
 .ingredients {
@@ -73,9 +130,15 @@ header {
 }
 
 .select {
-    padding: 10px 5px;
+    padding: 20px 10px;
     border: none;
     border-radius: 5px;
+    color: white;
+}
+
+option {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 #tags {

@@ -4,6 +4,7 @@ let ingredientList = [];
 let appareilList = []
 let ustensilsList = [];
 let shownRecipes = [];
+let selectedTags = [];
 
 async function getRecipes() {
   const response = await fetch("../recettes.json");
@@ -91,7 +92,6 @@ function addUstensils(data) {
 }
 
 async function init() {
-  console.log('init', ingredientList)
   const recettes = await getRecipes();
   displayData(recettes);
   searchInput();
@@ -107,47 +107,77 @@ function initEventListeners() {
 
   const selectUstensiles = document.getElementById('Ustensiles');
   selectUstensiles.addEventListener('change', getUstensilsTag)
-
 }
 
-async function getIngredientTag() {
-  const selectIngredients = document.getElementById('Ingredients');
-  let selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
-  console.log(shownRecipes)
-  let filtered = shownRecipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient.toLowerCase()))
-  shownRecipes = filtered;
-  displayData(shownRecipes)
-  addTag(selectedIngredient, 'blueTag')
+async function getIngredientTag(data) {
+    console.log("🚀 ~ file: index.js:113 ~ getIngredientTag ~ data", data)
+    const selectIngredients = document.getElementById('Ingredients');
+    let selectedIngredient;
+    if(data.name) {
+      const recettes = await getRecipes();
+      shownRecipes = recettes;
+      selectedIngredient = data.name;
+      let filtered = shownRecipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient.toLowerCase()))
+      shownRecipes = filtered;
+    } 
+    else if(!data.name) {
+      selectedIngredient = selectIngredients.options[selectIngredients.selectedIndex].text;
+      addTag(selectedIngredient, 'blueTag', 'ingredient')
+      let filtered = shownRecipes.filter(recipe => recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === selectedIngredient.toLowerCase()))
+      shownRecipes = filtered;
+    }
+    displayData(shownRecipes)
 }
 
-function getAppareilsTag() {
+function getAppareilsTag(data) {
   const selectAppareils = document.getElementById('Appareils');
   let selectedAppliance = selectAppareils.options[selectAppareils.selectedIndex].text;
   let filtered = shownRecipes.filter(recipe => recipe.appliance.toLowerCase() === selectedAppliance.toLowerCase())
   shownRecipes = filtered;
   displayData(shownRecipes)
-  addTag(selectedAppliance, 'greenTag')
+  addTag(selectedAppliance, 'greenTag', 'appliance')
 }
 
-function getUstensilsTag() {
+function getUstensilsTag(data) {
   const selectUstensils = document.getElementById('Ustensiles');
   let selectedUstensil = selectUstensils.options[selectUstensils.selectedIndex].text;
   let filtered = shownRecipes.filter(recipe => recipe.ustensils.some(ustensil => ustensil.toLowerCase() === selectedUstensil.toLowerCase()))
   shownRecipes = filtered;
   displayData(shownRecipes)
-  addTag(selectedUstensil, 'redTag')
+  addTag(selectedUstensil, 'redTag', 'ustensil')
 }
 
-async function addTag(name, color) {
+async function addTag(name, color, type) {
   const tagSection = document.getElementById('tags');
   let tagData = [];
   tagData.name = name;
   tagData.color = color;
-  console.log("🚀 ~ file: index.js:144 ~ addTag ~ tagData", tagData)
+  tagData.type = type;
+  selectedTags.push(tagData);
   const tagModel = tagFactory(tagData);
-  console.log('tagModel')
   const userDOM = tagModel.createTag();
   tagSection.appendChild(userDOM)
+  console.log(selectedTags)
+}
+
+async function removeTag(data) {
+  selectedTags.splice(selectedTags.indexOf(data.name), 1)
+  console.log("🚀 ~ file: index.js:161 ~ removeTag ~ data", selectedTags)
+  if(selectedTags.length == 0) {
+    const recettes = await getRecipes();
+    displayData(recettes)
+  }
+  selectedTags.forEach(x => {
+    if(x.type == 'ingredient') {
+      getIngredientTag(x)
+    }
+    if(x.type == 'appliance') {
+      getAppareilsTag(x)
+    }
+    if(x.type == 'ustensil') {
+      getUstensilsTag(x)
+    }
+  })
 }
 
 function searchInput() {
@@ -158,7 +188,6 @@ function searchInput() {
 async function filterSearch() {
   const recettes = await getRecipes();
   if (this.value == "") {
-    console.log(" ca passe ici");
     displayData(recettes);
   }
   if (this.value.length < 2) {
